@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Dashboard</title>
+    <link rel="stylesheet" href="/styles/dash2.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* Styling for username input, microphone button, and transaction table */
+      .user-input-container {
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .user-input-container input {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+
+      .user-input-container button {
+        padding: 8px 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .microphone-button {
+        background-color: #ddd;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 8px;
+        border-radius: 50%;
+        margin-left: 5px;
+      }
+
+      .microphone-button:hover {
+        background-color: #ccc;
+      }
+
+      .transaction-table {
+        margin-top: 20px;
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+      }
+
+      .transaction-table th,
+      .transaction-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+
+      .transaction-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="main" id="main">
+      <div class="sidebar" id="sidebar">
+        <img class="logo" src="/assets/logo 2 1.svg" alt="Logo" />
+        <ul>
+          <li><a href="dash2.html">Dashboard</a></li>
+          <li><a href="input.html">Detect Fraud</a></li>
+          <li><a href="check-data.html">Transactions</a></li>
+          <li><a href="login.html">Security</a></li>
+          <li class="last"><a href="logout.html">Help support</a></li>
+        </ul>
+      </div>
+
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        <img src="/assets/arrow.svg" alt="" />
+      </button>
+      <div class="content">
+        <div class="nav">
+          <div>
+            <h3>
+              Hi <span id="userGreeting">Guest</span> <img src="" alt="" />
+            </h3>
+          </div>
+          <div>
+            <img src="/assets/notifications.svg" alt="Notifications" />
+            <img src="/assets/profile.svg" alt="Profile" />
+          </div>
+        </div>
+
+        <div class="main-container-upload">
+          <!-- Username Input Section -->
+          <div class="user-input-container">
+            <input
+              type="text"
+              id="usernameInput"
+              placeholder="Enter your name"
+            />
+            <button onclick="displayData()">Submit</button>
+            <button class="microphone-button" onclick="startRecognition()">
+              🎤
+            </button>
+          </div>
+
+          <!-- Placeholder for Transaction Data -->
+          <div id="transactionData" style="display: none">
+            <h4>Transaction Data for <span id="userName"></span></h4>
+            <table class="transaction-table">
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>T12345</td>
+                  <td>2024-10-28</td>
+                  <td>$120.00</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>T12346</td>
+                  <td>2024-10-29</td>
+                  <td>$75.00</td>
+                  <td>Pending</td>
+                </tr>
+                <tr>
+                  <td>T12347</td>
+                  <td>2024-10-30</td>
+                  <td>$200.00</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>T12348</td>
+                  <td>2024-10-31</td>
+                  <td>$50.00</td>
+                  <td>Failed</td>
+                </tr>
+                <tr>
+                  <td>T12349</td>
+                  <td>2024-11-01</td>
+                  <td>$300.00</td>
+                  <td>Completed</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="graph-cont">
+          <canvas id="fraudCasesGraph"></canvas>
+          <canvas id="riskLevelGraph"></canvas>
+          <canvas id="suspiciousTransactionsGraph"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleSidebar() {
+        const main = document.getElementById("main");
+        main.classList.toggle("hide-sidebar");
+      }
+
+      function displayData() {
+        const username = document.getElementById("usernameInput").value.trim();
+        const userGreeting = document.getElementById("userGreeting");
+        const transactionData = document.getElementById("transactionData");
+        const userNameDisplay = document.getElementById("userName");
+
+        if (username) {
+          userGreeting.textContent = username;
+          userNameDisplay.textContent = username;
+          transactionData.style.display = "block";
+        } else {
+          alert("Please enter your name to view transaction data.");
+          transactionData.style.display = "none";
+        }
+      }
+
+      function startRecognition() {
+        if (!("webkitSpeechRecognition" in window)) {
+          alert("Sorry, your browser does not support speech recognition.");
+          return;
+        }
+
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = function () {
+          console.log("Voice recognition started.");
+        };
+
+        recognition.onresult = function (event) {
+          const transcript = event.results[0][0].transcript;
+          document.getElementById("usernameInput").value = transcript;
+          displayData();
+        };
+
+        recognition.onerror = function (event) {
+          console.error("Error during recognition:", event.error);
+        };
+
+        recognition.onend = function () {
+          console.log("Voice recognition ended.");
+        };
+
+        recognition.start();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/dash2.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  </head>
+
+  <body>
+    <div class="main" id="main">
+      <div class="sidebar" id="sidebar">
+        <img class="logo" src="/assets/logo 2 1.svg" alt="Logo" />
+        <ul>
+          <li><a href="dash2.html">Dashboard</a></li>
+          <li><a href="input.html">Detect Fraud</a></li>
+          <li><a href="check-data.html">Transactions</a></li>
+          <li><a href="login.html">Security</a></li>
+          <li class="last"><a href="logout.html">Help support</a></li>
+        </ul>
+      </div>
+
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        <img src="/assets/arrow.svg" alt="" />
+      </button>
+
+      <div class="content">
+        <div class="nav">
+          <div>
+            <h3>Hi Malik Hassan <img src="" alt="" /></h3>
+          </div>
+          <div>
+            <img src="/assets/notifications.svg" alt="img1" />
+            <img src="/assets/profile.svg" alt="img2" />
+          </div>
+        </div>
+        <div class="main-container">
+          <div class="analytic-top">
+            <h3>Frauds Analysis</h3>
+            <canvas id="myChart"></canvas>
+          </div>
+          <div class="card-cont">
+            <div class="card">
+              <h3>18.6K</h3>
+              <p>Tarsactions</p>
+            </div>
+            <div class="card">
+              <h3>2.3k</h3>
+              <p>Frauds Detected</p>
+            </div>
+            <div class="card">
+              <h3>2k</h3>
+              <p>True Positive</p>
+            </div>
+            <div class="card">
+              <h3>420</h3>
+              <p>Suspicious flagged</p>
+            </div>
+          </div>
+          <div class="info-tab">
+            <div class="map-info">
+              <div id="map"></div>
+              <canvas id="areaFraudChart"></canvas>
+            </div>
+            <div class="top-content">
+              <div class="season-wise">
+                <table class="season-table">
+                  <thead>
+                    <tr>
+                      <th>Season</th>
+                      <th>Fraud Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Spring</td>
+                      <td>120</td>
+                    </tr>
+                    <tr>
+                      <td>Summer</td>
+                      <td>150</td>
+                    </tr>
+                    <tr>
+                      <td>Autumn</td>
+                      <td>90</td>
+                    </tr>
+                    <tr>
+                      <td>Winter</td>
+                      <td>110</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="category-wise"></div>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="bottom-pie">
+              <div class="bottom-pie-selector">
+                <h3>Visitors Analytics</h3>
+                <select>
+                  <option>Monthly</option>
+                  <option>Weekly</option>
+                  <option>Daily</option>
+                </select>
+              </div>
+
+              <canvas
+                id="fraudDoughnutChart"
+                style="width: 100%; height: 100%"
+              ></canvas>
+            </div>
+            <div class="top-user">
+              <h3>Top Fraud Merchants</h3>
+              <table class="merchant-table">
+                <thead>
+                  <tr>
+                    <th>Merchant</th>
+                    <th>Fraud Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Merchant A</td>
+                    <td>150</td>
+                  </tr>
+                  <tr>
+                    <td>Merchant B</td>
+                    <td>120</td>
+                  </tr>
+                  <tr>
+                    <td>Merchant C</td>
+                    <td>90</td>
+                  </tr>
+                  <tr>
+                    <td>Merchant D</td>
+                    <td>80</td>
+                  </tr>
+                  <tr>
+                    <td>Merchant E</td>
+                    <td>70</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleSidebar() {
+        const main = document.getElementById("main");
+        main.classList.toggle("hide-sidebar");
+      }
+    </script>
+    <!-- ------------- Graphs Data -------- -->
+    <script>
+      // Dummy data for demonstration
+      const dummyData = [
+        { location: "Berlin", coords: [52.52, 13.405], fraudCount: 45 },
+        { location: "Sydney", coords: [-33.8688, 151.2093], fraudCount: 30 },
+        { location: "Moscow", coords: [55.7558, 37.6173], fraudCount: 70 },
+        {
+          location: "Rio de Janeiro",
+          coords: [-22.9068, -43.1729],
+          fraudCount: 50,
+        },
+      ];
+      const perfraudData = [
+        { location: "United States", fraudCount: 35 },
+        { location: "Canada", fraudCount: 26 },
+        { location: "France", fraudCount: 18 },
+        { location: "Italy", fraudCount: 14 },
+        { location: "Australia", fraudCount: 10 },
+        { location: "India", fraudCount: 7 },
+      ];
+
+      // Function to set marker color based on fraud count
+      function getColor(fraudCount) {
+        return fraudCount > 100 ? "red" : fraudCount > 50 ? "orange" : "green";
+      }
+
+      // Loop through dummy data and add markers
+      dummyData.forEach((data) => {
+        L.circleMarker(data.coords, {
+          color: getColor(data.fraudCount),
+          radius: 8,
+          fillOpacity: 0.7,
+        })
+          .addTo(map)
+          .bindPopup(
+            `<b>${data.location}</b><br>Fraud Count: ${data.fraudCount}`
+          );
+      });
+    </script>
+    <!-- ------------- MAP SCRIPT -------- -->
+    <script>
+      var map = L.map("map").setView([20, 0], 2); // Centered on the equator
+
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        {
+          attribution: "© OpenStreetMap contributors, © CARTO",
+          maxZoom: 18,
+        }
+      ).addTo(map);
+
+      const fraudData = [
+        { location: "New York", coords: [40.7128, -74.006], fraudCount: 120 },
+        { location: "London", coords: [51.5074, -0.1278], fraudCount: 80 },
+        { location: "Tokyo", coords: [35.6895, 139.6917], fraudCount: 95 },
+        { location: "Paris", coords: [48.8566, 2.3522], fraudCount: 60 },
+      ];
+
+      function getColor(fraudCount) {
+        return fraudCount > 100 ? "red" : fraudCount > 50 ? "orange" : "green";
+      }
+
+      fraudData.forEach((data) => {
+        L.circleMarker(data.coords, {
+          color: getColor(data.fraudCount),
+          radius: 8,
+          fillOpacity: 0.7,
+        })
+          .addTo(map)
+          .bindPopup(
+            `<b>${data.location}</b><br>Fraud Count: ${data.fraudCount}`
+          );
+      });
+    </script>
+    <!-- --------------- TOP CHART ----------- -->
+    <script>
+      var ctx = document.getElementById("myChart").getContext("2d");
+      var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ],
+          datasets: [
+            {
+              label: "Reported Fraud",
+              data: [12, 19, 3, 5, 2, 3, 7, 8, 6, 4, 10, 15],
+              backgroundColor: [
+                "#23304A",
+                "#23304A",
+                "#23304A",
+                "#23304A",
+                "#23304A",
+                "#23304A",
+              ],
+              borderWidth: 1,
+              barThickness: 20,
+              borderRadius: 3,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              grid: {
+                display: false,
+              },
+            },
+            y: {
+              beginAtZero: true,
+            },
+          },
+          plugins: {
+            legend: {
+              display: false, // Hide legend
+            },
+          },
+        },
+      });
+    </script>
+    <!-- --------------- Country BAr Chart ----------- -->
+    <script>
+      // Sample data for countries and fraud percentages
+      const ctxArea = document
+        .getElementById("areaFraudChart")
+        .getContext("2d");
+      const areaFraudChart = new Chart(ctxArea, {
+        type: "bar",
+        data: {
+          labels: fraudData.map((data) => data.location), // Country names as labels
+          datasets: [
+            {
+              data: fraudData.map((data) => data.fraudCount), // Fraud percentages as data
+              backgroundColor: "#23304A", // Bar color (similar to your example)
+              borderRadius: 10, // Rounded bar corners
+              borderSkipped: false, // Rounds all corners
+              barThickness: 15, // Reduced bar width
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y", // Makes it horizontal
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              beginAtZero: true,
+              max: Math.max(...fraudData.map((data) => data.fraudCount)) + 20,
+              display: false, // Hide the x-axis
+            },
+            y: {
+              grid: {
+                display: false, // Hide y-axis grid
+              },
+              ticks: {
+                font: {
+                  size: 14,
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false, // Hide legend
+            },
+            tooltip: {
+              enabled: false, // Disable tooltips
+            },
+            datalabels: {
+              anchor: "center",
+              align: "center",
+              color: "white",
+              font: {
+                size: 12,
+                weight: "bold",
+              },
+              formatter: (value) => `${value}%`, // Show percentage on the bar
+            },
+          },
+        },
+        plugins: [ChartDataLabels],
+      });
+    </script>
+    <!------------- fraud Pie Chart -------------- -->
+    <script>
+      // Define data and colors
+      const data = {
+        labels: ["Desktop", "Tablet", "Mobile", "Unknown"],
+        datasets: [
+          {
+            data: [65, 34, 45, 12], // Percentage values
+            backgroundColor: [
+              "#23304A", // Dark Blue
+              "#2E4A7D", // Slate Blue
+              "#3C6E9A", // Steel Blue
+              "#427CA3", // Teal Blue
+              "#4F91B8", // Muted Aqua
+              "#5AA7D1", // Light Blue
+            ],
+            borderWidth: 0,
+          },
+        ],
+      };
+
+      // Define options
+      const options = {
+        responsive: true,
+        cutout: "70%", // Makes it a doughnut chart
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom", // Position legends on the right side
+            labels: {
+              usePointStyle: true,
+              padding: 5,
+              boxWidth: 10,
+            },
+          },
+          tooltip: {
+            enabled: true,
+          },
+          datalabels: {
+            color: "#fff",
+            font: {
+              weight: "bold",
+              size: 16,
+            },
+            formatter: (value, ctx) => {
+              let total = ctx.chart._metasets[0].total;
+              let percentage = ((value / total) * 100).toFixed(2) + "%";
+              return percentage;
+            },
+          },
+        },
+      };
+
+      // Render chart
+      const chartContext = document
+        .getElementById("fraudDoughnutChart")
+        .getContext("2d");
+      const fraudDoughnutChart = new Chart(chartContext, {
+        type: "doughnut",
+        data: data,
+        options: options,
+        plugins: [ChartDataLabels],
+      });
+    </script>
+  </body>
+</html>

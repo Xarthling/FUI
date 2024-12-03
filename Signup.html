@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="styles/Authstyles.css">
+</head>
+
+<body>
+    <div class="main">
+        <div class="main-container">
+            <div class="content">
+                <img class="logo" src="assets/logo 2 1.svg" alt="Logo">
+                <h1>Your First Line Of Defence Against Fraud</h1>
+            </div>
+            <div class="card">
+                <form action="/submit_signup" method="post" class="signup-form">
+                    <img class="card-logo" src="assets/logo 2 1.svg" alt="Logo">
+                    <div class="name-fields">
+                        <div class="field-group">
+                            <label class="label" for="first_name">First Name:</label>
+                            <input class="inputfield" type="text" id="first_name" name="first_name"  required>
+                        </div>
+                        <div class="field-group">
+                            <label class="label" for="last_name">Last Name:</label>
+                            <input class="inputfield" type="text" id="last_name" name="last_name" required>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label class="label" for="email">Email:</label>
+                        <input class="inputfield" type="email" id="email" name="email" required>
+                    </div>
+                    <div class="field-group">
+                        <label class="label" for="user_id">User ID:</label>
+                        <input class="inputfield" type="text" id="user_id" name="user_id" required>
+                    </div>
+                    <div class="field-group">
+                        <label class="label" for="password">Password:</label>
+                        <input class="inputfield" type="password" id="password" name="password" required>
+                    </div>
+                    <div class="field-group">
+                        <label class="label" for="confirm_password">Confirm Password:</label>
+                        <input class="inputfield" type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button class="btn" type="submit">Sign In</button>
+                </form>
+                <div class="login">
+                    <!-- <img class="infologo" src="/assets/information-button 1.svg" alt=""> -->
+                    <p>Already have an account? <a href="/login">Login</a></p>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

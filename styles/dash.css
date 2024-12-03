@@ -1,0 +1,340 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 1vw;
+}
+
+.main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    transition: all 0.3s ease;
+}
+
+.main .sidebar {
+    width: 15%;
+    background: linear-gradient(320deg, #23304A 60%, #121921);
+    color: #fff;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1vw 0;
+    transition: width 0.3s ease;
+}
+
+.main .content {
+    flex-grow: 1;
+    background-color: #fff;
+    padding: 1vw 2vw;
+    transition: all 0.3s ease;
+}
+
+.main .content .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(320deg, #23304A 60%, #121921);
+    border-radius: 20px;
+    color: #fff;
+    padding: .5vw;
+    font-size: 1.5vw;
+}
+
+.main .content .nav img {
+    width: 2vw;
+    margin: 0 1vw;
+}
+
+.main .content .nav img:hover {
+    background-color: #ffffff2a;
+    border-radius: 10px;
+}
+
+.main .sidebar .logo {
+    width: 10vw;
+    height: 10vw;
+}
+
+.main .sidebar ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main .sidebar ul li {
+    list-style: none;
+    padding: 1vw;
+    text-align: center;
+}
+
+.main .sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2vw;
+}
+
+.main .sidebar ul li:hover {
+    width: 90%;
+    background: #ffffff2a;
+    border-radius: 10px;
+}
+
+.main .sidebar ul .last {
+    position: fixed;
+    bottom: 0;
+}
+
+.toggle-btn {
+    position: absolute;
+    top: 50%;
+    left: 15%;
+    transform: translateY(-50%);
+    width: 3vw;
+    height: 3vw;
+    background-color: #23304A;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: left 0.3s ease;
+}
+
+.main.hide-sidebar .sidebar {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.main.hide-sidebar .toggle-btn {
+    left: 0.5vw;
+}
+
+.main-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* border: 1px solid red; */
+    overflow-y: scroll;
+
+}
+
+.main-container-upload {
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid red; */
+    overflow-y: scroll;
+
+}
+
+.main-container-upload-cont {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.main-container-upload .btn {
+    width: 40%;
+    padding: .5vw;
+    background: #23304A;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2vw;
+    margin: 1vw 0;
+}
+
+.main-container-upload .btn:hover {
+    background: #3c4453;
+    color: #fff;
+}
+
+#uploadForm {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#csvFileInput {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+}
+
+#uploadForm button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: Arial, sans-serif;
+}
+
+#uploadForm button:hover {
+    background-color: #45a049;
+}
+
+#loadingMessage {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #888;
+    margin: 10px 0;
+}
+
+/* Table styling */
+#dataDisplay {
+    margin-top: 20px;
+}
+
+#dataTable {
+    width: 50vw;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
+}
+
+#dataTable th,
+#dataTable td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#dataTable th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+}
+
+#dataTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.main-container .card-cont {
+    display: flex;
+    flex-direction: row;
+}
+
+.main-container .card {
+    width: 15vw;
+    height: 10vw;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1vw;
+    margin: 1vw;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.349);
+}
+
+.main-container .graph-cont {
+    width: 30vw;
+    height: 20vw;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    padding: 1vw;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .main .sidebar {
+        width: 50%;
+        border-radius: 0;
+        flex-direction: column;
+    }
+
+    .main .content {
+        width: 100%;
+        font-size: 3vw;
+    }
+
+    .main .content .nav {
+        width: 95%;
+        font-size: 3vw;
+        padding: 1vw;
+    }
+
+    .main .sidebar .logo {
+        width: 10vw;
+    }
+
+    .main .sidebar ul {
+        flex-direction: column;
+    }
+
+    .main .sidebar ul li {
+        padding: 0.5vw;
+        font-size: 3vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .toggle-btn {
+        width: 8vw;
+        height: 8vw;
+        font-size: 3.5vw;
+        left: 32%;
+
+    }
+
+    .main .sidebar .toggle-btn {
+        left: 50%;
+    }
+
+    .main .content {
+        font-size: 4vw;
+    }
+
+    .main .content .nav {
+        font-size: 4vw;
+        padding: 0.5vw;
+    }
+
+    .main .sidebar .logo {
+        width: 10vw;
+    }
+
+    .main .sidebar ul li {
+        padding: 5vw;
+    }
+
+    .main .sidebar ul li a {
+        font-size: 3vw;
+    }
+}

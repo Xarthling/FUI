@@ -1,0 +1,113 @@
+.main-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+#uploadForm {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-direction: column;
+}
+
+#csvFileInput {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: Arial, sans-serif;
+}
+
+.ubtn {
+  padding: 8px 16px;
+  background-color: #23304a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: Arial, sans-serif;
+  font-size: 1vw;
+}
+
+.ubtn:hover {
+  background-color: #44474c;
+}
+
+#loadingMessage {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #888;
+  margin: 10px 0;
+}
+
+.input-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.input-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 50%;
+  height: 50%;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.input-card h2 {
+  margin: 15px 0;
+}
+
+.input-card p {
+  padding: 0 15px;
+  color: #666;
+}
+
+.input-card button {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 15px 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.input-card button:hover {
+  background-color: #0056b3;
+}
+
+.input-card.show {
+  opacity: 1;
+}
+
+.back-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
+}
+
+#input-card1 .back-button {
+  display: none;
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/dash2.css" />
+    <link rel="stylesheet" href="styles/DataFeed.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="main" id="main">
+        <div class="sidebar" id="sidebar">
+            <img class="logo" src="/assets/logo 2 1.svg" alt="Logo" />
+            <ul>
+                <li><a href="dash2.html">Dashboard</a></li>
+                <li><a href="input.html">Detect Fraud</a></li>
+                <li><a href="check-data.html">Transactions</a></li>
+                <li><a href="login.html">Security</a></li>
+                <li class="last"><a href="logout.html">Help support</a></li>
+            </ul>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleSidebar()">
+            <img src="/assets/arrow.svg" alt="" />
+        </button>
+        <div class="content">
+            <div class="nav">
+                <div>
+                    <h3>Hi Malik Hassan <img src="" alt="" /></h3>
+                </div>
+                <div>
+                    <img src="/assets/notifications.svg" alt="img1" />
+                    <img src="/assets/profile.svg" alt="img2" />
+                </div>
+            </div>
+            <div class="main-container">
+                <div class="input-card" id="card1">
+                    <button class="back-button" onclick="goBack(1)" disabled>Back</button>
+                    <h2>Card 1</h2>
+                    <p>This is the first card in the storyline. It introduces the main idea and sets the stage.</p>
+                    <h4>Upload CSV File</h4>
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <input type="file" id="csvFileInput" accept=".csv" />
+                        <button class="ubtn" type="button" onclick="uploadFile()">Upload</button>
+                    </form>
+                    <div id="loadingMessage" style="display: none">
+                        Loading file, please wait...
+                    </div>
+                </div>
+                <div class="input-card" id="card2" style="display: none;">
+                    <button class="back-button" onclick="goBack(2)">Back</button>
+                    <h2>Card 2</h2>
+                    <p>This is the second card, adding more details and building upon the initial concept.</p>
+                    <div id="csvDataDisplay">
+                        <h5>CSV Data (First 5 Rows):</h5>
+                        <table id="csvTable">
+                            <thead id="csvTableHead"></thead>
+                            <tbody id="csvTableBody"></tbody>
+                        </table>
+                    </div>
+                    <button onclick="showNextCard(2)">Submit</button>
+                </div>
+                <div class="input-card" id="card3" style="display: none;">
+                    <button class="back-button" onclick="goBack(3)">Back</button>
+                    <h2>Card 3</h2>
+                    <p>This is the final card, concluding the storyline and providing a summary or call to action.</p>
+                    <button onclick="showNextCard(3)">Submit</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    </div>
+    <script>
+        function uploadFile() {
+            const input = document.getElementById("csvFileInput");
+            const loadingMessage = document.getElementById("loadingMessage");
+            const tableHead = document.getElementById("csvTableHead");
+            const tableBody = document.getElementById("csvTableBody");
+
+            if (input.files.length === 0) {
+                alert("Please select a file to upload");
+                return;
+            }
+
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            // Show loading message
+            loadingMessage.style.display = "block";
+            tableHead.innerHTML = "";
+            tableBody.innerHTML = "";
+
+            reader.onload = function (event) {
+                const csvContent = event.target.result;
+                const rows = csvContent
+                    .trim()
+                    .split("\n")
+                    .map((row) => row.split(","));
+
+                // Hide loading message
+                loadingMessage.style.display = "none";
+
+                // Display table headers
+                const headers = rows[0];
+                const headerRow = document.createElement("tr");
+                headers.forEach((header) => {
+                    const th = document.createElement("th");
+                    th.textContent = header.trim();
+                    headerRow.appendChild(th);
+                });
+                tableHead.appendChild(headerRow);
+
+                // Display first 5 rows of data
+                rows.slice(1, 6).forEach((row) => {
+                    const rowElement = document.createElement("tr");
+                    row.forEach((cell) => {
+                        const td = document.createElement("td");
+                        td.textContent = cell.trim();
+                        rowElement.appendChild(td);
+                    });
+                    tableBody.appendChild(rowElement);
+                });
+
+                // Move to the next card
+                showNextCard(1);
+            };
+
+            reader.onerror = function () {
+                loadingMessage.style.display = "none";
+                alert("Could not read the file!");
+            };
+
+            reader.readAsText(file);
+        }
+
+        function showNextCard(currentCard) {
+            const currentElement = document.getElementById(`card${currentCard}`);
+            const nextCard = document.getElementById(`card${currentCard + 1}`);
+
+            if (nextCard) {
+                currentElement.classList.remove('show');
+                setTimeout(() => {
+                    currentElement.style.display = 'none';
+                    nextCard.style.display = 'block';
+                    setTimeout(() => {
+                        nextCard.classList.add('show');
+                    }, 50);
+                }, 500);
+            }
+        }
+
+        function goBack(currentCard) {
+            const currentElement = document.getElementById(`card${currentCard}`);
+            const previousCard = document.getElementById(`card${currentCard - 1}`);
+
+            if (previousCard) {
+                currentElement.classList.remove('show');
+                setTimeout(() => {
+                    currentElement.style.display = 'none';
+                    previousCard.style.display = 'block';
+                    setTimeout(() => {
+                        previousCard.classList.add('show');
+                    }, 50);
+                }, 500);
+            }
+        }
+
+        // Initialize the first card to be visible
+        const firstCard = document.getElementById('card1');
+        firstCard.style.display = 'block';
+        setTimeout(() => {
+            firstCard.classList.add('show');
+        }, 50);
+    </script>
+    <script>
+        function toggleSidebar() {
+            const main = document.getElementById("main");
+            main.classList.toggle("hide-sidebar");
+        }
+    </script>
+</body>
+
+</html>

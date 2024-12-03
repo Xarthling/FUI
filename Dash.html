@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/dash.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+    <div class="main" id="main">
+        <div class="sidebar" id="sidebar">
+            <img class="logo" src="/assets/logo 2 1.svg" alt="Logo">
+            <ul>
+                <li><a href="dash.html">Dashboard</a></li>
+                <li><a href="profile.html">Fraud</a></li>
+                <li><a href="settings.html">Transactions</a></li>
+                <li><a href="logout.html">Security</a></li>
+                <li class="last"><a href="logout.html">Help support</a></li>
+            </ul>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleSidebar()">></button>
+
+        <div class="content">
+            <div class="nav">
+                <div>
+                    <h3>Hi Malik Hassan <img src="" alt=""></h3>
+                </div>
+                <div> <img src="/assets/notifications.svg" alt="img1">
+                    <img src="/assets/profile.svg" alt="img2">
+                </div>
+            </div>
+            <div class="main-container">
+                <div class="card-cont">
+                    <div class="card">
+                        <h3>Fraud Cases</h3>
+                        <p>120 cases detected</p>
+                    </div>
+                    <div class="card">
+                        <h3>Alert Level</h3>
+                        <p>High</p>
+                    </div>
+                    <div class="card">
+                        <h3>Risk Score</h3>
+                        <p>85%</p>
+                    </div>
+                    <div class="card">
+                        <h3>Suspicious Transactions</h3>
+                        <p>42 flagged</p>
+                    </div>
+                </div>
+                <div class="graph-cont">
+                    <canvas id="fraudCasesGraph"></canvas>
+                    <canvas id="riskLevelGraph"></canvas>
+                    <canvas id="suspiciousTransactionsGraph"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const main = document.getElementById("main");
+            main.classList.toggle("hide-sidebar");
+        }
+    </script>
+    <script>
+    // Example data for each chart
+const fraudCasesData = [30, 50, 20, 100];
+const riskLevels = ['Low', 'Medium', 'High', 'Critical'];
+const riskLevelData = [10, 30, 50, 10];
+const suspiciousTransactionsData = [12, 8, 15, 5, 9];
+
+// Fraud Cases Chart
+new Chart(document.getElementById("fraudCasesGraph"), {
+    type: 'bar',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [{
+            label: 'Fraud Cases',
+            data: fraudCasesData,
+            backgroundColor: 'rgba(255, 99, 132, 0.6)'
+        }]
+    },
+    options: { responsive: true }
+});
+
+// Risk Level Distribution Chart
+new Chart(document.getElementById("riskLevelGraph"), {
+    type: 'pie',
+    data: {
+        labels: riskLevels,
+        datasets: [{
+            label: 'Risk Level',
+            data: riskLevelData,
+            backgroundColor: ['#4caf50', '#ffeb3b', '#ff9800', '#f44336']
+        }]
+    },
+    options: { responsive: true }
+});
+
+// Suspicious Transactions Over Time
+new Chart(document.getElementById("suspiciousTransactionsGraph"), {
+    type: 'line',
+    data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        datasets: [{
+            label: 'Suspicious Transactions',
+            data: suspiciousTransactionsData,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            fill: true
+        }]
+    },
+    options: { responsive: true }
+});
+
+
+    </script>
+</body>
+
+</html>

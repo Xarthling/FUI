@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fraud Detection Model Overview</title>
+    <link rel="stylesheet" href="/styles/dash2.css" />
+    <link rel="stylesheet" href="/styles/model.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="main" id="main">
+        <div class="sidebar" id="sidebar">
+            <img class="logo" src="/assets/logo 2 1.svg" alt="Logo" />
+            <ul>
+                <li><a href="dash2.html">Dashboard</a></li>
+                <li><a href="input.html">Detect Fraud</a></li>
+                <li><a href="check-data.html">Transactions</a></li>
+                <li><a href="login.html">Security</a></li>
+                <li class="last"><a href="logout.html">Help support</a></li>
+            </ul>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleSidebar()">
+            <img src="/assets/arrow.svg" alt="Toggle Sidebar" />
+        </button>
+
+        <div class="content">
+            <div class="nav">
+                <div>
+                    <h3>Hi Malik Hassan</h3>
+                </div>
+                <div>
+                    <img src="/assets/notifications.svg" alt="Notifications" />
+                    <img src="/assets/profile.svg" alt="Profile" />
+                </div>
+            </div>
+
+            <div class="main-container">
+                <div class="main-container-model">
+                    <h2>Model Overview (Voting Classifier)</h2>
+                    <div class="prediction-result">
+                        <!-- <h3>Prediction Result</h3> -->
+                        <div class="main-message">
+                            <p>Transaction ID:12345</p>
+                            <p><strong>Prediction:</strong>
+                                <span id="prediction-status" style="background-color: rgba(255, 0, 0, 0.623);">Fraud
+                                    Detected</span>
+                            </p>
+                            <script>
+                                const predictionStatus = document.getElementById("prediction-status");
+                                if (predictionStatus.innerText === "Fraud Detected") {
+                                    predictionStatus.style.backgroundColor = "rgba(255, 0, 0, 0.7)";
+                                } else {
+                                    predictionStatus.style.backgroundColor = "green";
+                                }
+                            </script>
+                        </div>
+                        <div class="message-details">
+                            <p>Anomaly Score: 0.85 (High)</p>
+
+                            <p>Transaction Amount: $10,500</p>
+
+                            <p>Location: New York, USA</p>
+
+                            <p>Time of Transaction: 14:35, March 7, 2024</p>
+
+
+                        </div>
+                    </div>
+                    <div class="model-card-container">
+                        <div class="card">
+                            <h4>95%</h4>
+                            <p>Model Accuracy</p>
+                        </div>
+                        <div class="card">
+                            <h4>93%</h4>
+                            <p>Model Precision</p>
+                        </div>
+                        <div class="card">
+                            <h4>94%</h4>
+                            <p>Model Recall</p>
+                        </div>
+                        <div class="card">
+                            <h4>93.5%</h4>
+                            <p>F1 Score</p>
+                        </div>
+                    </div>
+                    <div class="model-graphs">
+                        <div>
+                            <canvas id="confusionMatrixChart"></canvas>
+                        </div>
+                        <div>
+                            <canvas id="featureImportanceChart"></canvas>
+                        </div>
+                        <div>
+                            <canvas id="fraudDistributionChart"></canvas>
+                        </div>
+                        <div>
+                            <canvas id="rocCurveChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const main = document.getElementById("main");
+            main.classList.toggle("hide-sidebar");
+        }
+
+        // Mock data for charts
+        const ctxConfusion = document
+            .getElementById("confusionMatrixChart")
+            .getContext("2d");
+        const confusionMatrixChart = new Chart(ctxConfusion, {
+            type: "bar",
+            data: {
+                labels: [
+                    "True Positive",
+                    "False Positive",
+                    "True Negative",
+                    "False Negative",
+                ],
+                datasets: [
+                    {
+                        label: "Count",
+                        data: [280, 20, 4750, 50],
+                        backgroundColor: [
+                            "#23304a",
+
+                        ],
+                        borderColor: [
+                            "#23304a",
+
+                        ],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Confusion Matrix", // Title for the Confusion Matrix chart
+                        font: {
+                            size: 16,
+                            weight: "bold",
+                        },
+                        padding: { top: 10, bottom: 20 }, // Adjusts the padding
+                    },
+                },
+            },
+        });
+
+        // ROC Curve
+        const ctxRoc = document.getElementById("rocCurveChart").getContext("2d");
+        const rocCurveChart = new Chart(ctxRoc, {
+            type: "line",
+            data: {
+                labels: [0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 1],
+                datasets: [
+                    {
+                        label: "ROC Curve",
+                        data: [0, 0.2, 0.4, 0.6, 0.8, 0.9, 1, 1],
+                        borderColor: "#23304a",
+                        backgroundColor: "rgb(0, 67, 122, 0.4)",
+                        fill: true,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "ROC Curve", // Title for the ROC Curve chart
+                        font: {
+                            size: 16,
+                            weight: "bold",
+                        },
+                        padding: { top: 10, bottom: 20 }, // Adjusts the padding
+                    },
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "False Positive Rate",
+                        },
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: "True Positive Rate",
+                        },
+                        beginAtZero: true,
+                        max: 1,
+                    },
+                },
+            },
+        });
+
+        // Feature Importance
+        const ctxFeatureImportance = document
+            .getElementById("featureImportanceChart")
+            .getContext("2d");
+        const featureImportanceChart = new Chart(ctxFeatureImportance, {
+            type: "bar",
+            data: {
+                labels: [
+                    "Feature 1",
+                    "Feature 2",
+                    "Feature 3",
+                    "Feature 4",
+                    "Feature 5",
+                ],
+                datasets: [
+                    {
+                        label: "Importance",
+                        data: [0.4, 0.3, 0.15, 0.1, 0.05],
+                        backgroundColor: "#23304a",
+                        borderColor: "#23304a",
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Feature Importance", // Title for the Feature Importance chart
+                        font: {
+                            size: 16,
+                            weight: "bold",
+                        },
+                        padding: { top: 10, bottom: 20 }, // Adjusts the padding
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 1,
+                    },
+                },
+            },
+        });
+
+        // Fraud Distribution
+        const ctxFraudDistribution = document
+            .getElementById("fraudDistributionChart")
+            .getContext("2d");
+        const fraudDistributionChart = new Chart(ctxFraudDistribution, {
+            type: "pie",
+            data: {
+                labels: ["Fraudulent", "Non-Fraudulent"],
+                datasets: [
+                    {
+                        label: "Fraud Distribution",
+                        data: [300, 5000],
+                        backgroundColor: [
+                            "#23304a",
+                            "#385791",
+                        ],
+                        //   borderColor: ["rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Fraud Distribution", // Title for the Fraud Distribution chart
+                        font: {
+                            size: 16,
+                            weight: "bold",
+                        },
+                        padding: { top: 10, bottom: 20 }, // Adjusts the padding
+                    },
+                    legend: {
+                        position: "top",
+                    },
+                },
+            },
+        });
+    </script>
+</body>
+
+</html>
